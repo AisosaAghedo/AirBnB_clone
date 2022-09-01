@@ -10,7 +10,7 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        key = "{}.{}".format(obj.__class__.name, obj.id)
+        key = "{}.{}".format(type(obj).__name__, obj.id)
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -19,7 +19,7 @@ class FileStorage:
             to_dict[key] = obj.to_dict()
 
         with open(FileStorage.__file_path, 'w', encoding="UTF-8") as file:
-            json.dump(FileStorage.__objects, file)
+            json.dump(to_dict, file)
 
     def reload(self):
         try:
