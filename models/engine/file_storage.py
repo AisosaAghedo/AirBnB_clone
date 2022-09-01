@@ -20,3 +20,16 @@ class FileStorage:
 
         with open(FileStorage.__file_path, 'w', encoding="UTF-8") as file:
             json.dump(FileStorage.__objects, file)
+
+    def reload(self):
+        try:
+            with open(FileStorage.__file_path, 'r') as f:
+                load = json.load(f)
+
+            new_dict = {}
+            for key, value in load.items():
+                obj = BaseModel(**value)
+                new_dict[key] = obj
+
+        except FileNotFoundError:
+            pass
