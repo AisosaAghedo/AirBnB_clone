@@ -9,13 +9,19 @@ class BaseModel:
     """
     class BaseModel that defines all common methods for other classes
     """
-    def __init__(self, *args, **kwargs): 
+    def __init__(self, *args, **kwargs):
         """ initialisation of the class BaseModel """
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-        if len(kwargs == 0):
-            storage.new(self)
+        if kwargs:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    if key in ["created_at", "updated_at"]:
+                        self.__dict__[key] = datetime.fromisoformat(value)
+                    else:
+                        self.__dict__[key] = value
+        else:
+            self.id = str(uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def save(self):
         """ updates the public instance attribute updated_at
