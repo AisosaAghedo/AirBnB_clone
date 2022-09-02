@@ -8,7 +8,7 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         key = "{}.{}".format(type(obj).__name__, obj.id)
@@ -32,5 +32,7 @@ class FileStorage:
                 obj = BaseModel(**value)
                 new_dict[key] = obj
 
+            FileStorage.__objects = new_dict
+
         except FileNotFoundError:
-            pass
+            return
