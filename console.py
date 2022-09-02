@@ -8,6 +8,7 @@ import shlex
 
 classes = {'BaseModel': BaseModel}
 
+
 class HBNBCommand(cmd.Cmd):
     """ HBNB class """
     prompt = '(hbnb) '
@@ -127,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
                                 if args[2] in integers:
                                     try:
                                         args[3] = int(args[3])
-                                    except ValueError: 
+                                    except ValueError:
                                         args[3] = 0
                                 elif args[2] in floats:
                                     try:
@@ -146,6 +147,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
