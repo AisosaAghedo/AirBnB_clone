@@ -3,6 +3,12 @@
 import json
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
+import os
 
 
 class FileStorage:
@@ -16,7 +22,7 @@ class FileStorage:
 
     def new(self, obj):
         """ sets in __objects the obj with key <obj class name>.id"""
-        key = "{}.{}".format(type(obj).__name__, obj.id)
+        key = "{}.{}".format(obj.__class__.__name__, str(obj.id))
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -25,21 +31,14 @@ class FileStorage:
         for key, obj in FileStorage.__objects.items():
             to_dict[key] = obj.to_dict()
 
-        with open(FileStorage.__file_path, 'w', encoding="UTF-8") as file:
-            json.dump(to_dict, file)
+        with open(FileStorage.__file_path, 'w', encoding="UTF-8") as f:
+            json.dump(to_dict, f)
 
     def reload(self):
         """ deserializes the JSON file to __objects """
-        try:
-            with open(FileStorage.__file_path, 'r') as f:
+        if (os.path.isfile(FileStorage.__file_path)):
+            with open(FileStorage.__file_path, 'r', encoding="utf-8") as f:
                 load = json.load(f)
-
-            new_dict = {}
-            for key, value in load.items():
-                obj = BaseModel(**value)
-                new_dict[key] = obj
-
-            FileStorage.__objects = new_dict
-
-        except FileNotFoundError:
-            return
+                for key, value in load.items():
+                    FileStorage.__objects[key] = eval(
+                        value['__class__'])(**value)
