@@ -7,7 +7,3 @@ class City(BaseModel):
     """ subclass city that inherits from Basemodel """
     state_id = ""
     name = ""
-
-    def __init__(*args, **kwargs):
-        """ initialisation """
-        super().__init__(*args, **kwargs)

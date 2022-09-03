@@ -8,7 +8,3 @@ class Amenity(BaseModel):
     BaseModel """
 
     name = ""
-
-    def __init__(*args, **kwargs):
-        """ initialisation """
-        super().__init__(*args, **kwargs)
