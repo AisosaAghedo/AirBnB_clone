@@ -7,7 +7,3 @@ class State(BaseModel):
     """subclass state that inherits fromn Basemodel """
 
     name = ""
-
-    def __init__(*args, **kwargs):
-        """ initialisation """
-        super().__init__(*args, **kwargs)
