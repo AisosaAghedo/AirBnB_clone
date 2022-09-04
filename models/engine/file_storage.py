@@ -8,7 +8,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-
+import models
 
 class FileStorage:
     """ class FileStorage
@@ -50,3 +50,14 @@ class FileStorage:
                         value['__class__'])(**value)
         except FileNotFoundError:
             return
+
+    def count(self, cls):
+        """
+        counts the number of objects in storage
+        """
+        counter = 0
+        for key in models.storage.all().keys():
+            if cls in key:
+                counter += 1
+        return counter
+
