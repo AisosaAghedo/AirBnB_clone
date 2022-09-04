@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-""" subclass User module """
 from models.base_model import BaseModel
+""" subclass User module """
 
 
 class User(BaseModel):
