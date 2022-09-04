@@ -8,7 +8,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-import os
 
 
 class FileStorage:
@@ -36,9 +35,11 @@ class FileStorage:
 
     def reload(self):
         """ deserializes the JSON file to __objects """
-        if (os.path.isfile(FileStorage.__file_path)):
+        try:
             with open(FileStorage.__file_path, 'r', encoding="utf-8") as f:
                 load = json.load(f)
                 for key, value in load.items():
                     FileStorage.__objects[key] = eval(
                         value['__class__'])(**value)
+        except FileNotFoundError:
+            return
