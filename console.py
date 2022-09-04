@@ -162,26 +162,21 @@ class HBNBCommand(cmd.Cmd):
                 command = n_list[1].split('(')[0]
                 if command not in cmds:
                     print("*** invalid syntax: {} ***".format(arg))
-                # handles object.all() cmd
                 if command == cmds[0]:
                     self.do_all(instance)
                     return
-                # handles object.count() cmd
                 if command == cmds[1]:
                     print(models.storage.count(instance))
                     return
                 Id = n_list[1].split('(')[1].split(')')[0]
-                # handles object.destroy() cmd
                 if command == cmds[2]:
                     Arg = instance + " " + Id
                     self.do_destroy(Arg)
                     return
-                # handles object.show() cmd
                 if command == cmds[3]:
                     Arg = instance + " " + Id
                     self.do_show(Arg)
                     return
-                # handles object.update() command
                 if command == cmds[4]:
                     Arg = (n_list[-1].split(","))
                     n_id = Arg[0].split("(")[-1]
