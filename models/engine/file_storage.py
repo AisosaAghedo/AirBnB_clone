@@ -11,7 +11,14 @@ from models.review import Review
 
 
 class FileStorage:
-    """ class FileStorage """
+    """ class FileStorage
+    Serves as file storage engine
+
+    attrs:
+        __file path (str): Name of file path to save object to
+        __objects (dict): Dictionary of instantiated keyword argument
+
+    """
     __file_path = "file.json"
     __objects = {}
 
