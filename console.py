@@ -152,5 +152,51 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    def default(self, arg):
+        """ advanced arguments"""
+        cmds = ["all", "count", "destroy", "show", "update"]
+        n_list = arg.split('.')
+        if len(n_list) > 1:
+            try:
+                instance = n_list[0]
+                command = n_list[1].split('(')[0]
+                if command not in cmds:
+                    print("*** invalid syntax: {} ***".format(arg))
+                # handles object.all() cmd
+                if command == cmds[0]:
+                    self.do_all(instance)
+                    return
+                # handles object.count() cmd
+                if command == cmds[1]:
+                    print(models.storage.count(instance))
+                    return
+                Id = n_list[1].split('(')[1].split(')')[0]
+                # handles object.destroy() cmd
+                if command == cmds[2]:
+                    Arg = instance + " " + Id
+                    self.do_destroy(Arg)
+                    return
+                # handles object.show() cmd
+                if command == cmds[3]:
+                    Arg = instance + " " + Id
+                    self.do_show(Arg)
+                    return
+                # handles object.update() command
+                if command == cmds[4]:
+                    Arg = (n_list[-1].split(","))
+                    n_id = Arg[0].split("(")[-1]
+                    n_name = Arg[1]
+                    n_value = Arg[2].split(')')[0]
+                    self.do_update("{} \
+{} {} {}".format(instance, n_id, n_name, n_value))
+
+                    return
+            except IndexError:
+                return
+
+        else:
+            print("*** invalid syntax: {} ***")
+
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
