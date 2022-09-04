@@ -11,22 +11,10 @@ class TestFileStorageClass(TestCase):
     """Test for FileStorage class methods and atrributes"""
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(self):
         """sets up class instance"""
         try:
             os.rename("file.json", "tmp")
-        except IOError:
-            pass
-
-    @classmethod
-    def tearDownClass(cls):
-        """ tear down the created class instance """
-        try:
-            os.remove("file.json")
-        except IOError:
-            pass
-        try:
-            os.rename("tmp", "file.json")
         except IOError:
             pass
 
@@ -40,6 +28,20 @@ class TestFileStorageClass(TestCase):
         new_dict1 = sto.all()
         new_dict2 = sto.all()
         self.assertEqual(new_dict1, new_dict2)
+
+    @classmethod
+    def tearDownClass(self):
+        """ tear down the created class instance """
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+        FileStorage._FileStorage__objects = {}
+
 
     if '__name__' == '__main__':
         unittest.main()
