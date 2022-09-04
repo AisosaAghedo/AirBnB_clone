@@ -4,7 +4,7 @@ import models
 from datetime import datetime
 import time
 import unittest
-from models.base_model import BaseModel
+from models.user import User
 import pycodestyle
 
 
@@ -12,76 +12,76 @@ class TestUser_Instantiation(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """ sets up class instance"""
-        cls.bm = BaseModel()
+        cls.user = User()
 
     @classmethod
     def tearDownClass(cls):
         """tear Down Class Instance"""
-        del cls.bm
+        del cls.user
 
-    def test_base_model_type(self):
-        self.assertEqual(BaseModel, type(self.bm))
+    def test_no_arg_instantiates(self):
+        self.assertEqual(User, type(User()))
 
     def test_new_instances_in_objects(self):
-        self.assertIn(self.bm, models.storage.all().values())
+        self.assertIn(self.user, models.storage.all().values())
 
     def test_id(self):
         """test if id is string after is has been
         converted to string in BaseModel()"""
-        self.assertEqual(type(self.bm.id), str)
+        self.assertEqual(type(self.user.id), str)
 
-    def test_id_is_unique(self):
+    def test_two_users_id_is_unique(self):
         """test if same id occur twice"""
-        bm2 = BaseModel()
-        self.assertNotEqual(self.bm.id, bm2.id)
+        user2 = User()
+        self.assertNotEqual(self.user.id, user2.id)
 
     def test_updated_at(self):
         """test to comfirm 'updated_at' attribute is a datetime object
         and also not private attr"""
-        self.assertEqual(type(self.bm.updated_at), datetime)
+        self.assertEqual(type(self.user.updated_at), datetime)
 
     def test_created_at(self):
         """confirm if 'created_at' is a public datetime"""
-        self.assertEqual(type(self.bm.created_at), datetime)
+        self.assertEqual(type(self.user.created_at), datetime)
 
     def test_args_instantiation(self):
         """test to confirm args is unused"""
-        BaseModel(None)
-        self.assertNotIn(None, BaseModel.__dict__.values())
+        User(None)
+        self.assertNotIn(None, User().__dict__.values())
 
     def test_kwargs_instantiation(self):
         """test key word arguments instantiation"""
         dateNtime = datetime.now()
         dateNtime2 = dateNtime.isoformat()
-        bm = BaseModel(id="123", created_at=dateNtime2, updated_at=dateNtime2)
-        self.assertEqual(bm.id, "123")
-        self.assertEqual(bm.created_at, dateNtime)
-        self.assertEqual(bm.updated_at, dateNtime)
+        user = User(id="123", created_at=dateNtime2, updated_at=dateNtime2)
+        self.assertEqual(user.id, "123")
+        self.assertEqual(user.created_at, dateNtime)
+        self.assertEqual(user.updated_at, dateNtime)
 
     def test_args_kwargs_instantiation(self):
         """test to confirm that BaseModel will discard args
         and make us of the kwargs"""
         date_time = datetime.now()
         formated_date_time = date_time.isoformat()
-        bm = BaseModel("Ajiboye", id="123", created_at=formated_date_time,
-                       updated_at=formated_date_time)
-        self.assertEqual(bm.id, "123")
-        self.assertEqual(bm.created_at, date_time)
-        self.assertEqual(bm.updated_at, date_time)
+        user = User("Ajiboye", id="123", created_at=formated_date_time,
+                    updated_at=formated_date_time)
+        self.assertEqual(user.id, "123")
+        self.assertEqual(user.created_at, date_time)
+        self.assertEqual(user.updated_at, date_time)
 
     def test_created_at(self):
         """test two different created_at time"""
-        bm1 = self.bm
+        user1 = self.user
         time.sleep(0.5)
-        bm2 = BaseModel()
-        self.assertLess(bm1.created_at, bm2.created_at)
+        user2 = User()
+        self.assertLess(user1.created_at, user2.created_at)
 
     def test_udated_at(self):
         """test two different updated time"""
-        bm1 = self.bm
+        user1 = self.user
         time.sleep(0.5)
-        bm2 = BaseModel()
-        self.assertLess(bm1.updated_at, bm2.updated_at)
+        user2 = User()
+        self.assertLess(user1.updated_at, user2.updated_at)
 
 
 class TestBaseClass(unittest.TestCase):
@@ -89,21 +89,21 @@ class TestBaseClass(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up class instance"""
-        cls.testbase = BaseModel()
+        cls.user = User()
 
     @classmethod
     def tearDownClass(cls):
-        del cls.testbase
+        del cls.user
 
     def test_pycodestyle_compliance_base_model(self):
         """test for PEP8/pycodestyle compliance"""
         style = pycodestyle.StyleGuide(quiet=True)
-        result = style.check_files(['models/base_model.py'])
+        result = style.check_files(['models/user.py'])
         self.assertEqual(result.total_errors, 0, "Found errors or warnings")
 
     def test_save_method(self):
         """Test save method to confirm if updated time changes etc."""
-        first_instance = BaseModel()
+        first_instance = User()
         original_time = first_instance.updated_at
         time.sleep(0.5)
         first_instance.save()
@@ -111,41 +111,63 @@ class TestBaseClass(unittest.TestCase):
         self.assertNotEqual(original_time, new_updated_time)
 
     def test_save_with_arg(self):
-        self.testbase
+        self.user
         with self.assertRaises(TypeError):
-            self.testbase.save(None)
+            self.user.save(None)
 
     def test_saves_updates_file(self):
-        self.testbase.save()
-        Id = "BaseModel." + self.testbase.id
+        self.user.save()
+        Id = "User." + self.user.id
         with open("file.json", 'r') as file:
             self.assertIn(Id, file.read())
 
     def test_to_dict_method(self):
         """Test to_dict_method whether it return a dict object"""
-        new_dict = self.testbase.to_dict()
+        new_dict = self.user.to_dict()
         self.assertIsInstance(new_dict['created_at'], str)
         self.assertIsInstance(new_dict['updated_at'], str)
-        self.assertEqual(new_dict['__class__'], 'BaseModel')
+        self.assertEqual(new_dict['__class__'], 'User')
 
     def test_dict_new_attributes(self):
         """test that dict contains newly added attributes """
-        self.testbase
-        self.testbase.name = "Holberton_School"
-        self.testbase.my_number = 98
-        _dict = self.testbase.to_dict()
-        self.assertIn("name", _dict)
+        self.user
+        self.user.first_name = "Holberton"
+        self.user.email = "Alx@alx.com"
+        self.user.password = "$12345!"
+        self.user.last_name = "School"
+        self.user.my_number = 98
+        _dict = self.user.to_dict()
+        self.assertIn("first_name", _dict)
         self.assertIn("my_number", _dict)
+        self.assertIn("password", _dict)
+        self.assertIn("last_name", _dict)
+        self.assertIn("email", _dict)
 
     def test_to_dict_with_arg(self):
-        self.testbase
+        self.user
         with self.assertRaises(TypeError):
-            self.testbase.to_dict(None)
+            self.user.to_dict(None)
 
     def test_str_overide(self):
-        _dict = self.testbase.__dict__
-        expected = "[BaseModel] ({}) {}".format(self.testbase.id, _dict)
-        self.assertEqual(expected, str(self.testbase))
+        _dict = self.user.__dict__
+        expected = "[User] ({}) {}".format(self.user.id, _dict)
+        self.assertEqual(expected, str(self.user))
+
+    def test_email_attribute(self):
+        """checks if email is str"""
+        self.assertIsInstance(self.user.email, str)
+
+    def test_first_name_attr(self):
+        """checks if first name is public str"""
+        self.assertIsInstance(self.user.first_name, str)
+
+    def test_last_name_attr(self):
+        """checks if last name is public str"""
+        self.assertIsInstance(self.user.last_name, str)
+
+    def test_password_attr(self):
+        """checks if password is public str"""
+        self.assertIsInstance(self.user.password, str)
 
     if '__name__' == '__main__':
         unittest.main()
