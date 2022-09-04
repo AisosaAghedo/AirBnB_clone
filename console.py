@@ -100,20 +100,17 @@ class HBNBCommand(cmd.Cmd):
         cmd_args = shlex.split(arg)
         obj_list = []
         if len(cmd_args) == 0:
-            for value in models.storage.all().values():
-                obj_list.append(str(value))
-            print("[", end="")
-            print(", ".join(obj_list), end="")
-            print("]")
+            obj_dict = models.storage.all()
         elif cmd_args[0] in classes:
-            for key in models.storage.all():
-                if cmd_args[0] in key:
-                    obj_list.append(str(models.storage.all()[key]))
-            print("[", end="")
-            print(", ".join(obj_list), end="")
-            print("]")
+            obj_dict = models.storage.all(classes[cmd_args[0]])
         else:
             print("** class doesn't exist **")
+            return False
+        for key in obj_dict:
+            obj_list.append(str(obj_dict[key]))
+        print("[", end="")
+        print(", ".join(obj_list), end="")
+        print("]")
 
     def do_update(self, arg):
         """
@@ -154,26 +151,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
-
-    def _key_value_parser(self, args):
-        """creates a dictionary from a list of strings"""
-        new_dict = {}
-        for arg in args:
-            if "=" in arg:
-                kvp = arg.split('=', 1)
-                key = kvp[0]
-                value = kvp[1]
-                if value[0] == value[-1] == '"':
-                    value = shlex.split(value)[0].replace('_', ' ')
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
-                        value = float(value)
-                new_dict[key] = value
-        return new_dict
-
-
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
