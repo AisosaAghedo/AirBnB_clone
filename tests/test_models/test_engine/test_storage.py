@@ -1,34 +1,45 @@
 #!/usr/bin/python3
 """test module for the file storage class"""
 import json
-import unittest
-from models import storage
+from unittest import TestCase
+from models.engine.file_storage import FileStorage
+from models.base_model import BaseModel
+import os
 
 
-class TestFileStorageClass(unittest.TestCase):
+class TestFileStorageClass(TestCase):
     """Test for FileStorage class methods and atrributes"""
 
     @classmethod
     def setUpClass(cls):
         """sets up class instance"""
-        cls.testStorage = storage
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
 
     @classmethod
     def tearDownClass(cls):
         """ tear down the created class instance """
-        del cls.testStorage
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
-    def test_all_method(self):
-        """test the all method whether it return all the objects and as dict"""
-        objects = self.testStorage.all()
-        self.assertIsInstance(objects, dict)
-
-    def test_save_method(self):
-        """test the save method to see if it saves objects to JSON file"""
-        with open("file.json", 'r') as f:
-            content = json.load(f)
-            mytype = type(content)
-            self.assertEqual(mytype, dict)
+    def test_storage_methods(self):
+        """tests all the 'FileStorage' methods"""
+        sto = FileStorage()
+        obj = BaseModel()
+        sto.new(obj)
+        sto.save()
+        sto.reload()
+        new_dict1 = sto.all()
+        new_dict2 = sto.all()
+        self.assertEqual(new_dict1, new_dict2)
 
     if '__name__' == '__main__':
         unittest.main()
