@@ -100,20 +100,17 @@ class HBNBCommand(cmd.Cmd):
         cmd_args = shlex.split(arg)
         obj_list = []
         if len(cmd_args) == 0:
-            for value in models.storage.all().values():
-                obj_list.append(str(value))
-            print("[", end="")
-            print(", ".join(obj_list), end="")
-            print("]")
+            obj_dict = models.storage.all()
         elif cmd_args[0] in classes:
-            for key in models.storage.all():
-                if cmd_args[0] in key:
-                    obj_list.append(str(models.storage.all()[key]))
-            print("[", end="")
-            print(", ".join(obj_list), end="")
-            print("]")
+            obj_dict = models.storage.all(classes[cmd_args[0]])
         else:
             print("** class doesn't exist **")
+            return False
+        for key in obj_dict:
+            obj_list.append(str(obj_dict[key]))
+        print("[", end="")
+        print(", ".join(obj_list), end="")
+        print("]")
 
     def do_update(self, arg):
         """
@@ -155,24 +152,50 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def _key_value_parser(self, args):
-        """creates a dictionary from a list of strings"""
-        new_dict = {}
-        for arg in args:
-            if "=" in arg:
-                kvp = arg.split('=', 1)
-                key = kvp[0]
-                value = kvp[1]
-                if value[0] == value[-1] == '"':
-                    value = shlex.split(value)[0].replace('_', ' ')
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
-                        value = float(value)
-                new_dict[key] = value
-        return new_dict
+    def default(self, arg):
+        """ advanced arguments"""
+        cmds = ["all", "count", "destroy", "show", "update"]
+        n_list = arg.split('.')
+        if len(n_list) > 1:
+            try:
+                instance = n_list[0]
+                command = n_list[1].split('(')[0]
+                if command not in cmds:
+                    print("*** invalid syntax: {} ***".format(arg))
+                # handles object.all() cmd
+                if command == cmds[0]:
+                    self.do_all(instance)
+                    return
+                # handles object.count() cmd
+                if command == cmds[1]:
+                    print(models.storage.count(instance))
+                    return
+                Id = n_list[1].split('(')[1].split(')')[0]
+                # handles object.destroy() cmd
+                if command == cmds[2]:
+                    Arg = instance + " " + Id
+                    self.do_destroy(Arg)
+                    return
+                # handles object.show() cmd
+                if command == cmds[3]:
+                    Arg = instance + " " + Id
+                    self.do_show(Arg)
+                    return
+                # handles object.update() command
+                if command == cmds[4]:
+                    Arg = (n_list[-1].split(","))
+                    n_id = Arg[0].split("(")[-1]
+                    n_name = Arg[1]
+                    n_value = Arg[2].split(')')[0]
+                    self.do_update("{} \
+{} {} {}".format(instance, n_id, n_name, n_value))
 
+                    return
+            except IndexError:
+                return
+
+        else:
+            print("*** invalid syntax: {} ***")
 
 
 if __name__ == '__main__':
