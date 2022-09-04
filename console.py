@@ -168,7 +168,7 @@ class HBNBCommand(cmd.Cmd):
                     return
                 # handles object.count() cmd
                 if command == cmds[1]:
-                    print(models.storage.count(instance))
+                    print(count(instance))
                     return
                 Id = n_list[1].split('(')[1].split(')')[0]
                 # handles object.destroy() cmd
@@ -196,6 +196,18 @@ class HBNBCommand(cmd.Cmd):
 
         else:
             print("*** invalid syntax: {} ***")
+
+    def count(self, cls):
+        """
+        counts the number of objects in storage
+        """
+        counter = 0
+        for key in models.storage.all().keys():
+            if cls in key:
+                counter += 1
+        return counter
+
+
 
 
 if __name__ == '__main__':
