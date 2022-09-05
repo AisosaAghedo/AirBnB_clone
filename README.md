@@ -266,7 +266,7 @@ e952b772-80a5-41e9-b728-6bc4dc5c21b4
     <summary>Ajiboye Adeleye Pius</summary>
     <ul>
     <li><a href="https://www.github.com/Adeleye080">Github</a></li>
-    <li><a href="https://www.linkedin.com/in/ajiboye-adeleye-b561a7211/"</a></li>
+    <li><a href="https://www.linkedin.com/in/ajiboye-adeleye-b561a7211/">LinkedIn</a></li>
     <li><a href="mailto:ajiboyeadeleye080@gmail.com">e-mail</a></li>
     </ul>
 </details>
