@@ -1295,7 +1295,7 @@ class TestHBNBCommand_update(unittest.TestCase):
         testCmd = "update Place {} 'latitude' 7.2".format(testId)
         self.assertFalse(HBNBCommand().onecmd(testCmd))
         test_dict = storage.all()["Place.{}".format(testId)].__dict__
-        self.assertEqual('7.2', test_dict['latitude'])
+        self.assertEqual(7.2, test_dict['latitude'])
 
     """def test_update_valid_float_attr_dot_notation(self):
         with patch("sys.stdout", new=StringIO()) as output:
