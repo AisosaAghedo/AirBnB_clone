@@ -273,8 +273,9 @@ e952b772-80a5-41e9-b728-6bc4dc5c21b4
 <details>
     <summary>Aisosa Aghedo</summary>
     <ul>
-    <li><a href="https://github.com/AisosaAghedo">Github</a></li>
-    <li><a href="#">e-mail</a></li>
+    <li><a href="https://github.com/AisosaAghedo"> Github </a></li>
+    <li><a href="mailto:mailto:allysonaghedo@gmail.com"> e-mail </a></li>
+    <li><a href="https://www.linkedin.com/in/aisosa-aghedo-aa412b232"> LinkedIn </a></li>
     </ul>
 </details>
 
