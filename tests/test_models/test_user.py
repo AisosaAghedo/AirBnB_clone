@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-"""test module for basemodel class"""
+"""unittest module for User class
+unittest classes:
+    TestUser_Instantiation
+    TestUserClass
+"""
 import models
 from datetime import datetime
 import time
@@ -84,7 +88,7 @@ class TestUser_Instantiation(unittest.TestCase):
         self.assertLess(user1.updated_at, user2.updated_at)
 
 
-class TestBaseClass(unittest.TestCase):
+class TestUserClass(unittest.TestCase):
     """Test for BaseModel class attributes and methods"""
     @classmethod
     def setUpClass(cls):
@@ -95,7 +99,7 @@ class TestBaseClass(unittest.TestCase):
     def tearDownClass(cls):
         del cls.user
 
-    def test_pycodestyle_compliance_base_model(self):
+    def test_pycodestyle_compliance_user(self):
         """test for PEP8/pycodestyle compliance"""
         style = pycodestyle.StyleGuide(quiet=True)
         result = style.check_files(['models/user.py'])

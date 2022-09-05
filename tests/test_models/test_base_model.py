@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-"""test module for basemodel class"""
+"""unittest module for basemodel class
+unittest classes:
+    TestBase_Instantiation
+    TestBaseClass
+    """
 import models
 from datetime import datetime
 import time
